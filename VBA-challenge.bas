@@ -15,6 +15,10 @@ Sub stockdata()
     Dim TSV As LongLong
     Dim Lastrow As LongLong
     Dim ws_name As String
+    Dim rng As Range
+    Dim min As Double
+    Dim max As Double
+    Dim GTSV As LongLong
 
     
     Lastrow = Cells(Rows.Count, 1).End(xlUp).Row
@@ -26,8 +30,29 @@ For Each ws In Worksheets
     ws.Cells(1, 11).Value = "Yearly Change"
     ws.Cells(1, 12).Value = "Percent Change"
     ws.Cells(1, 13).Value = "Total Stock Volume"
+    ws.Cells(1, 17).Value = "Ticker"
+    ws.Cells(1, 18).Value = "value"
+    ws.Cells(2, 16).Value = "Greatest % increase"
+    ws.Cells(3, 16).Value = "Greatest % decrease"
+    ws.Cells(4, 16).Value = "Greatest Total Volume"
+     
+    Set rng = ws.Range("L:L")
+    min = Application.WorksheetFunction.min(rng)
+    max = Application.WorksheetFunction.max(rng)
+    
+    ws.Cells(2, 18).Value = min
+    ws.Cells(3, 18).Value = max
+    
+    Set rng = ws.Range("M:M")
+    GTSV = Application.WorksheetFunction.max(rng)
+    
+    ws.Cells(4, 18).Value = GTSV
+    
     TSV = 0
     symbol = 2
+    
+    
+   
 'grab first open ticker price before we start looping
     Tik_open = ws.Cells(2, 3).Value
     For i = 2 To Lastrow
@@ -81,6 +106,9 @@ For Each ws In Worksheets
             TSV = 0
           End If
        Next i
+       
+       'Finding Greatest %increase
+
     Next ws
 End Sub
 
